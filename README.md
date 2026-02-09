@@ -1,18 +1,35 @@
-# Isupayx
+# iSupayX – Transaction Processing API
 
-To start your Phoenix server:
+API-only Phoenix application for processing merchant transactions with layered validation, idempotency, and compliance checks.
 
-* Run `mix setup` to install and setup dependencies
-* Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+## Tech Stack
+- Elixir
+- Phoenix
+- Ecto
+- SQLite
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+## Setup
+```bash
+mix deps.get
+mix ecto.create
+mix ecto.migrate
+mix run priv/repo/seeds.exs
+mix phx.server
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+```
 
-## Learn more
+## API
+```
+POST /api/v1/transactions
+```
+## Headers:
+```
+Content-Type: application/json
 
-* Official website: https://www.phoenixframework.org/
-* Guides: https://hexdocs.pm/phoenix/overview.html
-* Docs: https://hexdocs.pm/phoenix
-* Forum: https://elixirforum.com/c/phoenix-forum
-* Source: https://github.com/phoenixframework/phoenix
+X-Api-Key
+
+Idempotency-Key (optional)
+```
+## Notes
+
+- See decision_log.md for architecture decisions and assumptions.
