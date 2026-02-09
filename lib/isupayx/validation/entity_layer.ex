@@ -1,6 +1,6 @@
 defmodule Isupayx.Validation.EntityLayer do
   alias Isupayx.{Repo}
-  alias Isupayx.Schemas.{Merchant, PaymentMethod, MerchantPaymentMethod}
+  alias Isupayx.Schemas.MerchantPaymentMethod
 
   def validate(%{merchant: merchant, payment_method: method}) do
     cond do

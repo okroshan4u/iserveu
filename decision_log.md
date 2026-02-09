@@ -27,3 +27,13 @@ Started with Phoenix API setup, then core schemas and validation pipeline.
 - Merchant and PaymentMethod have a many-to-many relationship via MerchantPaymentMethod.
 - Junction table carries business fields like min_amount, max_amount, and daily_limit.
 - This relationship directly impacts entity and business rule validation.
+
+
+## Known limitations and fixes
+-- Fixed a compile-time struct resolution error by moving schema modules under lib/isupayx/, ensuring they are      compiled by the application.
+
+
+## Bug Fixes / Learnings
+-- - Normalized numeric comparisons by converting request amounts to Decimal to avoid integer–decimal comparison issues in business rule validation.
+
+

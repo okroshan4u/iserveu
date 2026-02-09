@@ -1,10 +1,12 @@
 defmodule Isupayx.Validation.BusinessLayer do
   def validate(%{amount: amount, method_config: config}) do
+    amount = Decimal.new(amount)
+
     cond do
-      amount < config.min_amount ->
+      Decimal.cmp(amount, config.min_amount) == :lt ->
         rule_error("RULE_AMOUNT_BELOW_MIN", "Amount below minimum")
 
-      amount > config.max_amount ->
+      Decimal.cmp(amount, config.max_amount) == :gt ->
         rule_error("RULE_AMOUNT_ABOVE_MAX", "Amount above maximum")
 
       true ->
