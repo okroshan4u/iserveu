@@ -1,18 +1,6 @@
-# Script for populating the database. You can run it as:
-#
-#     mix run priv/repo/seeds.exs
-#
-# Inside the script, you can read and write to any of your
-# repositories directly:
-#
-#     Isupayx.Repo.insert!(%Isupayx.SomeSchema{})
-#
-# We recommend using the bang functions (`insert!`, `update!`
-# and so on) as they will fail if something goes wrong.
-
-
 alias Isupayx.Repo
 alias Isupayx.Schemas.{Merchant, PaymentMethod, MerchantPaymentMethod}
+import Decimal
 
 # ---------- Merchant ----------
 merchant =
@@ -29,17 +17,53 @@ upi =
   Repo.insert!(%PaymentMethod{
     name: "UPI",
     code: "upi",
-    min_amount: 10,
-    max_amount: 100_000,
+    min_amount: new("1"),
+    max_amount: new("100000"),
     is_active: true
   })
 
-card =
+credit_card =
   Repo.insert!(%PaymentMethod{
     name: "Credit Card",
     code: "credit_card",
-    min_amount: 50,
-    max_amount: 200_000,
+    min_amount: new("100"),
+    max_amount: new("500000"),
+    is_active: true
+  })
+
+debit_card =
+  Repo.insert!(%PaymentMethod{
+    name: "Debit Card",
+    code: "debit_card",
+    min_amount: new("100"),
+    max_amount: new("200000"),
+    is_active: true
+  })
+
+net_banking =
+  Repo.insert!(%PaymentMethod{
+    name: "Net Banking",
+    code: "net_banking",
+    min_amount: new("100"),
+    max_amount: new("1000000"),
+    is_active: true
+  })
+
+wallet =
+  Repo.insert!(%PaymentMethod{
+    name: "Wallet",
+    code: "wallet",
+    min_amount: new("1"),
+    max_amount: new("50000"),
+    is_active: true
+  })
+
+bnpl =
+  Repo.insert!(%PaymentMethod{
+    name: "BNPL",
+    code: "bnpl",
+    min_amount: new("500"),
+    max_amount: new("100000"),
     is_active: true
   })
 
@@ -47,18 +71,50 @@ card =
 Repo.insert!(%MerchantPaymentMethod{
   merchant_id: merchant.id,
   payment_method_id: upi.id,
-  min_amount: 10,
-  max_amount: 100_000,
-  daily_limit: 500_000,
+  min_amount: new("1"),
+  max_amount: new("200000"),
+  daily_limit: new("9000000"),
   is_active: true
 })
 
 Repo.insert!(%MerchantPaymentMethod{
   merchant_id: merchant.id,
-  payment_method_id: card.id,
-  min_amount: 50,
-  max_amount: 200_000,
-  daily_limit: 1_000_000,
+  payment_method_id: credit_card.id,
+  min_amount: new("50"),
+  max_amount: new("200000"),
+  daily_limit: new("1000000"),
+  is_active: true
+})
+
+Repo.insert!(%MerchantPaymentMethod{
+  merchant_id: merchant.id,
+  payment_method_id: debit_card.id,
+  min_amount: new("100"),
+  max_amount: new("200000"),
+  is_active: true
+})
+
+Repo.insert!(%MerchantPaymentMethod{
+  merchant_id: merchant.id,
+  payment_method_id: net_banking.id,
+  min_amount: new("100"),
+  max_amount: new("1000000"),
+  is_active: true
+})
+
+Repo.insert!(%MerchantPaymentMethod{
+  merchant_id: merchant.id,
+  payment_method_id: wallet.id,
+  min_amount: new("1"),
+  max_amount: new("10000"),
+  is_active: true
+})
+
+Repo.insert!(%MerchantPaymentMethod{
+  merchant_id: merchant.id,
+  payment_method_id: bnpl.id,
+  min_amount: new("500"),
+  max_amount: new("100000"),
   is_active: true
 })
 

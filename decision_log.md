@@ -39,3 +39,6 @@ Started with Phoenix API setup, then core schemas and validation pipeline.
 
 ## Update
 -- Added Pub/Sub event module under lib/isupayx/events for transaction lifecycle events.
+- Used separate seeders for development (priv/repo/seeds.exs) and test environment to keep production logic isolated from test infrastructure.
+- Business rule validation enforces transaction amount limits. While the iSupayX specification defines min/max limits - per payment method with merchant-level overrides, a simplified global limit was implemented for the assessment scope, aligning with the minimum required validations.
+
