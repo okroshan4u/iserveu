@@ -120,14 +120,14 @@ flowchart TD
 
 Each validation layer:
 
-Is isolated
+- Is isolated
 
-Has a single responsibility
+- Has a single responsibility
 
-Can fail fast with meaningful errors
+- Can fail fast with meaningful errors
 
-🧠 Architecture Overview
-Diagram
+## 🧠 Architecture Overview
+```mermaid
 sequenceDiagram
     participant Client
     participant Controller
@@ -143,3 +143,5 @@ sequenceDiagram
     Repo-->>Validation: transaction
     Validation->>Events: emit_transaction_event
     Controller-->>Client: JSON Response
+
+```
