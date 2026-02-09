@@ -100,3 +100,46 @@ If the same request is sent again with the same Idempotency-Key:
 - Replays return the original response
 
 - Conflicting payloads with the same key are rejected
+
+ ## 🧩 Validation Pipeline
+
+Transaction processing is handled through a layered validation pipeline.
+
+```mermaid
+flowchart TD
+    A[Incoming Request] --> B[API Key Validation]
+    B --> C[Schema & Payload Validation]
+    C --> D[Idempotency Check]
+    D --> E[Business Rules Validation]
+    E --> F[Compliance Checks]
+    F --> G[Persist Transaction]
+    G --> H[Emit Events]
+    H --> I[Response]
+```
+
+
+Each validation layer:
+
+Is isolated
+
+Has a single responsibility
+
+Can fail fast with meaningful errors
+
+🧠 Architecture Overview
+Diagram
+sequenceDiagram
+    participant Client
+    participant Controller
+    participant Validation
+    participant Repo
+    participant Events
+
+    Client->>Controller: POST /transactions
+    Controller->>Validation: validate_request()
+    Validation->>Repo: check_idempotency()
+    Repo-->>Validation: ok / existing_txn
+    Validation->>Repo: insert_transaction()
+    Repo-->>Validation: transaction
+    Validation->>Events: emit_transaction_event
+    Controller-->>Client: JSON Response
