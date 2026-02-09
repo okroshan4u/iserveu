@@ -37,3 +37,5 @@ Started with Phoenix API setup, then core schemas and validation pipeline.
 -- - Normalized numeric comparisons by converting request amounts to Decimal to avoid integer–decimal comparison issues in business rule validation.
 
 
+## Update
+-- Added Pub/Sub event module under lib/isupayx/events for transaction lifecycle events.

@@ -15,6 +15,7 @@ defmodule Isupayx.Schemas.Transaction do
 
     field :customer_email, :string
     field :customer_phone, :string
+    field :idempotency_key, :string
 
     belongs_to :merchant, Isupayx.Schemas.Merchant
     belongs_to :payment_method, Isupayx.Schemas.PaymentMethod

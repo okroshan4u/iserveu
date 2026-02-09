@@ -1,8 +1,9 @@
 defmodule IsupayxWeb.TransactionController do
   use IsupayxWeb, :controller
 
-  alias Isupayx.{Repo}
-  alias Isupayx.Schemas.{Merchant, PaymentMethod, MerchantPaymentMethod}
+  alias Isupayx.Repo
+  alias Isupayx.Schemas.{Merchant, PaymentMethod, MerchantPaymentMethod, Transaction}
+  alias Isupayx.Events.TransactionEvents
 
   alias Isupayx.Validation.{
     SchemaLayer,
@@ -12,9 +13,14 @@ defmodule IsupayxWeb.TransactionController do
     RiskLayer
   }
 
+  # =======================
+  # PUBLIC ACTION
+  # =======================
   def create(conn, params) do
     with {:ok, api_key} <- fetch_api_key(conn),
          {:ok, merchant} <- fetch_merchant(api_key),
+         {:ok, idempotency_key} <- fetch_idempotency_key(conn),
+         {:ok, nil} <- find_existing_txn(merchant, idempotency_key),
          {:ok, method} <- fetch_payment_method(params),
          :ok <- SchemaLayer.validate(params),
          :ok <- EntityLayer.validate(%{merchant: merchant, payment_method: method}),
@@ -27,8 +33,8 @@ defmodule IsupayxWeb.TransactionController do
          {:ok, compliance_flags} <- ComplianceLayer.check(%{amount: params["amount"]}),
          :ok <- RiskLayer.check(%{}) do
       txn =
-        %Isupayx.Schemas.Transaction{}
-        |> Isupayx.Schemas.Transaction.changeset(%{
+        %Transaction{}
+        |> Transaction.changeset(%{
           amount: params["amount"],
           currency: params["currency"],
           status: :processing,
@@ -36,9 +42,12 @@ defmodule IsupayxWeb.TransactionController do
           customer_email: get_in(params, ["customer", "email"]),
           customer_phone: get_in(params, ["customer", "phone"]),
           merchant_id: merchant.id,
-          payment_method_id: method.id
+          payment_method_id: method.id,
+          idempotency_key: idempotency_key
         })
         |> Repo.insert!()
+
+      TransactionEvents.transaction_created(txn)
 
       json(conn |> put_status(:created), %{
         success: true,
@@ -54,6 +63,21 @@ defmodule IsupayxWeb.TransactionController do
         }
       })
     else
+      {:error, {:idempotent_replay, txn}} ->
+        json(conn, %{
+          success: true,
+          data: %{
+            transaction_id: txn.id,
+            status: txn.status,
+            amount: txn.amount,
+            currency: txn.currency
+          },
+          metadata: %{
+            idempotent: true,
+            timestamp: DateTime.utc_now()
+          }
+        })
+
       {:error, error} ->
         send_error(conn, error)
 
@@ -67,7 +91,28 @@ defmodule IsupayxWeb.TransactionController do
     end
   end
 
-  # ---------- helpers ----------
+  # =======================
+  # PRIVATE HELPERS
+  # =======================
+
+  defp find_existing_txn(_merchant, nil), do: {:ok, nil}
+
+  defp find_existing_txn(merchant, key) do
+    case Repo.get_by(Transaction,
+           merchant_id: merchant.id,
+           idempotency_key: key
+         ) do
+      nil -> {:ok, nil}
+      txn -> {:error, {:idempotent_replay, txn}}
+    end
+  end
+
+  defp fetch_idempotency_key(conn) do
+    case get_req_header(conn, "idempotency-key") do
+      [key] -> {:ok, key}
+      _ -> {:ok, nil}
+    end
+  end
 
   defp fetch_api_key(conn) do
     case get_req_header(conn, "x-api-key") do
