@@ -145,3 +145,37 @@ sequenceDiagram
     Controller-->>Client: JSON Response
 
 ```
+
+## Project Structure
+```
+lib/
+├── isupayx/
+│   ├── schemas/        # Ecto schemas (transactions, keys, etc.)
+│   ├── validation/     # Validation & business logic layers
+│   └── events/         # Domain events
+│
+├── isupayx_web/
+│   └── controllers/    # API controllers
+│
+priv/
+├── repo/
+│   └── migrations/     # Database migrations
+│
+test/
+├── isupayx_web/
+│   └── controllers/    # Controller tests
+```
+
+
+## 🧪 Testing
+
+Run the test suite with:
+```
+mix test
+```
+
+## Tests focus on:
+
+- Validation failures
+- Idempotency guarantees
+- API contract correctness
