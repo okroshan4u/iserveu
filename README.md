@@ -179,3 +179,36 @@ mix test
 - Validation failures
 - Idempotency guarantees
 - API contract correctness
+---
+## 📓 Design Notes
+
+Architecture decisions, tradeoffs, and assumptions are documented in:
+```
+decision_log.md
+```
+
+This includes:
+
+- Why SQLite was chosen
+
+- Validation strategy
+
+- Event handling approach
+
+- Idempotency storage model
+---
+## 🔮 Future Enhancements
+
+- Webhook delivery
+
+- Async processing via Oban
+
+- Fraud scoring module
+
+- Rate limiting
+
+- Multi-currency settlement logic
+---
+## 🧑‍💻 Author
+
+Built with ❤️ using Elixir & Phoenix.
