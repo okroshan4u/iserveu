@@ -45,3 +45,58 @@ mix ecto.create
 mix ecto.migrate
 mix run priv/repo/seeds.exs
 mix phx.server
+```
+
+Server will start at:
+```
+http://localhost:4000
+```
+##  🔌 API Overview
+### Create Transaction
+```
+POST /api/v1/transactions
+```
+### Headers
+```
+Content-Type: application/json
+X-Api-Key: <your-api-key>
+Idempotency-Key: <optional-unique-key>
+```
+### Request Body
+```
+{
+  "amount": 5000,
+  "currency": "USD",
+  "merchant_id": "mrc_123",
+  "reference": "order_456"
+}
+```
+### Successful Response
+```
+{
+  "status": "approved",
+  "transaction_id": "txn_abc123",
+  "amount": 5000,
+  "currency": "USD"
+}
+```
+### Idempotent Replay Response
+
+If the same request is sent again with the same Idempotency-Key:
+```
+
+{
+  "status": "approved",
+  "transaction_id": "txn_abc123",
+  "idempotent": true
+}
+```
+## 🔁 Idempotency Behavior
+
+- Idempotency is enforced per API key
+
+- The request payload is hashed and stored
+
+- Replays return the original response
+
+- Conflicting payloads with the same key are rejected
