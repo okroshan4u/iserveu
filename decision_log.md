@@ -13,7 +13,12 @@ Started with Phoenix API setup, then core schemas and validation pipeline.
 (Will update)
 
 ## Validation Layer Analysis
-(To be filled)
+1. Schema Layer – structural and type validation
+2. Entity Layer – merchant, payment method, and association checks
+3. Business Rule Layer – amount and limits enforcement
+4. Compliance Layer – flag-only regulatory checks
+5. Risk Layer – velocity and fraud heuristics
+
 
 ## Contradictions Found
 (To be filled)
