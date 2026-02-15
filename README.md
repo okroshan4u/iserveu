@@ -211,4 +211,4 @@ This includes:
 ---
 ## 🧑‍💻 Author
 
-Built with ❤️ using Elixir & Phoenix by Roshan
+Built with ❤️ using Elixir & Phoenix.
