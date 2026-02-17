@@ -91,7 +91,7 @@ If the same request is sent again with the same Idempotency-Key:
   "idempotent": true
 }
 ```
-## 🔁 Idempotency Behavior
+##  Idempotency Behavior
 
 - Idempotency is enforced per API key
 
