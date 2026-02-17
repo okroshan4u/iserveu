@@ -126,7 +126,7 @@ Each validation layer:
 
 - Can fail fast with meaningful errors
 
-## 🧠 Architecture Overview
+##  Architecture Overview
 ```mermaid
 sequenceDiagram
     participant Client
