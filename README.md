@@ -18,7 +18,7 @@ The system is intentionally minimal, explicit, and auditable — designed to res
 
 ---
 
-## 🧱 Tech Stack
+##  Tech Stack
 
 | Layer        | Technology |
 |-------------|------------|
