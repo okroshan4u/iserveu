@@ -51,7 +51,7 @@ Server will start at:
 ```
 http://localhost:4000
 ```
-##  🔌 API Overview
+##   API Overview
 ### Create Transaction
 ```
 POST /api/v1/transactions
