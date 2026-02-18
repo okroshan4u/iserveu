@@ -1,5 +1,4 @@
 # iSupayX – Transaction Processing API 
-
 **iSupayX** is an API-only Phoenix application for processing merchant transactions with **layered validation**, **idempotency guarantees**, and **compliance checks**.
 
 The system is intentionally minimal, explicit, and auditable — designed to resemble a real payment gateway core while remaining easy to reason about and extend.
