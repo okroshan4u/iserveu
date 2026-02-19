@@ -1,5 +1,5 @@
 
-import Config
+
 
 # Configure your database
 config :isupayx, Isupayx.Repo,
