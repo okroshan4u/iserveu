@@ -1,4 +1,4 @@
-defmodule Isupayx.MixProject do
+defmodule Isupayx.MixProject d
   use Mix.Project
 
   def project do
